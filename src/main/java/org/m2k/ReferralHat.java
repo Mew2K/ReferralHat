@@ -13,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -119,8 +120,12 @@ public class ReferralHat extends JavaPlugin implements Listener, CommandExecutor
         Player player = event.getEntity();
         ItemStack helmet = player.getInventory().getHelmet();
 
-        if (helmet != null && helmet.getType() == Material.DIAMOND_BLOCK && player.hasPermission("custom.hat")) {
-            event.getDrops().removeIf(item -> item.getType() == Material.DIAMOND_BLOCK);
+        if (helmet != null && helmet.getType() == Material.DIAMOND_BLOCK && helmet.hasItemMeta()) {
+            ItemMeta meta = helmet.getItemMeta();
+
+            if (meta.getDisplayName().equals("Special Hat") && player.hasPermission("custom.hat")) {
+                event.getDrops().removeIf(item -> item.hasItemMeta() && item.getItemMeta().getDisplayName().equals("Special Hat"));
+            }
         }
     }
 
@@ -176,7 +181,6 @@ public class ReferralHat extends JavaPlugin implements Listener, CommandExecutor
                 if (referrerPlayer != null) {
                     grantPermissionToPlayer(referrer);
                     referrerPlayer.sendMessage(ChatColor.GREEN + "You've earned a hat!");
-                    referrerPlayer.getInventory().setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
                     referrals.remove(playerUUID);
                 }
             }
@@ -199,7 +203,7 @@ public class ReferralHat extends JavaPlugin implements Listener, CommandExecutor
         ItemStack currentHelmet = player.getInventory().getHelmet();
         if (player.hasPermission("custom.hat")) {
             if (currentHelmet == null) {
-                player.getInventory().setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
+                player.getInventory().setHelmet(createSpecialHat());
                 player.sendMessage(ChatColor.GREEN + "You've equipped your special hat!");
             } else if (currentHelmet.getType() == Material.DIAMOND_BLOCK) {
                 player.getInventory().setHelmet(null);
@@ -314,5 +318,13 @@ public class ReferralHat extends JavaPlugin implements Listener, CommandExecutor
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ItemStack createSpecialHat() {
+        ItemStack hat = new ItemStack(Material.DIAMOND_BLOCK);
+        ItemMeta meta = hat.getItemMeta();
+        meta.setDisplayName("Special Hat");
+        hat.setItemMeta(meta);
+        return hat;
     }
 }
