@@ -1,0 +1,19 @@
+main: org.m2k.ReferralHat
+name: ReferralHat
+version: 1.0
+author: MewTwoKing
+description: A simple plugin that gives players a hat for referring other players.
+website: https://github.com/Mew2K/ReferralHat
+api-version: 1.16
+depend: [LuckPerms]
+commands:
+  hat:
+    description: Equips or unequips a special hat.
+    usage: "/hat"
+    aliases: [rhat, rh]
+  invite:
+    description: Invites a player for referral.
+    usage: "/invite <player>"
+  accept:
+    description: Accept a referral invitation.
+    usage: "/accept <player>"

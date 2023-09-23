@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.m2k'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://papermc.io/repo/repository/maven-public/'
+    }
+    maven {
+        url 'https://repo.luckperms.net/'
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'net.luckperms:api:5.3'
+}
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.m2k.ReferralHat',
+                'Implementation-Title': 'ReferralHat',
+                'Implementation-Version': version
+        )
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

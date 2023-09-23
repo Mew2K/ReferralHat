@@ -1,0 +1,2 @@
+# config.yml
+time_to_award: 7200  # number of seconds a referred player must play for to receive hat.
